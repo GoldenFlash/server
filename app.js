@@ -9,12 +9,12 @@ var usersRouter = require('./routes/users');
 
 var MongoClient = require('mongodb').MongoClient;
 
-var url = "mongodb://101.132.173.11:27017/test";
+var url = "mongodb://101.132.173.11:27017";
 
 MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     console.log('mongodb connect success');
-    var dbase = db.db("test");
+    var dbase = db.db("blogDatabase");
     // console.log(global)
     global.mongodb = dbase
 });
