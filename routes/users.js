@@ -87,13 +87,17 @@ router.post("/login", function(req, res, next) {
         var user = result[0];
         if (user) {
           if (user.passWord === passWord) {
-            console.log(res.cookie);
+            // console.log(req.cookie);
             // res.cookie("userId", "user.userId");
-            res.cookie("isVisit", 1, { maxAge: 60 * 1000, httpOnly: true });
-            // res.cookie("userName", "user.userName", {
-            //     path: '/',
-            //     maxAge: 1000 * 60 * 60
-            // });
+            console.log(user)
+            res.cookie("userId", user._id, {
+                path: '/',
+                maxAge: 1000 * 60 * 60
+            });
+            res.cookie("userName", user.nickName, {
+                path: '/',
+                maxAge: 1000 * 60 * 60
+            });
             res.json({
               data: {
                 account: result[0].account,
