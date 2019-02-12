@@ -23,7 +23,12 @@ router.post("/addCollections", function(req, res, next) {
       .find({ id: param.id })
       .toArray((err, result) => {
         if (err) {
-          throw err;
+           res.send({
+                status: 200,
+                // result: result,
+                data: null,
+                err: err
+              });
         } else {
           console.log(result[0].articleCollections);
           var findResult = [];
