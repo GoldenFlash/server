@@ -47,8 +47,8 @@ router.post("/register", function(req, res, next) {
             } else {
               console.log("userInfo", userInfo);
               var collections = [
-                { userId: userInfo._id, title: "日记本" },
-                { userId: userInfo._id, title: "随笔" }
+                { userId: userInfo._id.toHexString(), title: "日记本" },
+                { userId: userInfo._id.toHexString(), title: "随笔" }
               ];
               global.mongodb
                 .collection("collections")
@@ -90,7 +90,7 @@ router.post("/login", function(req, res, next) {
             // console.log(req.cookie);
             // res.cookie("userId", "user.userId");
             console.log(user)
-            res.cookie("userId", user._id, {
+            res.cookie("userId", user._id.toHexString(), {
                 path: '/',
                 maxAge: 1000 * 60 * 60
             });
@@ -98,11 +98,15 @@ router.post("/login", function(req, res, next) {
                 path: '/',
                 maxAge: 1000 * 60 * 60
             });
+            res.cookie("account", user.account, {
+                path: '/',
+                maxAge: 1000 * 60 * 60
+            });
             res.json({
               data: {
                 account: result[0].account,
                 nickName: result[0].nickName,
-                userId: result[0]._id
+                userId: result[0]._id.toHexString()
               },
               status: 200,
               err: null
@@ -124,4 +128,14 @@ router.post("/login", function(req, res, next) {
       }
     });
 });
+router.get("/logout",(req,res,next)=>{
+  res.clearCookie('userId', { path: '/' });
+  res.clearCookie('userName', { path: '/' });
+  res.clearCookie('account', { path: '/' });
+  res.send({
+    data:"退出成功",
+    status:200,
+    err:null
+  })
+})
 module.exports = router;
