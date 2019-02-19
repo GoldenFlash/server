@@ -3,7 +3,7 @@ var router = express.Router();
 var mongoose = require("mongoose");
 
 /* GET home page. */
-router.post("/articleList", function(req, res, next) {
+router.post("/getArticleList", function(req, res, next) {
   console.log(req.body);
   var param = req.body;
   global.mongodb
@@ -151,4 +151,31 @@ router.post("/getArticleList", (req, res, next) => {
       }
     });
 });
+router.post("/addNewArticle",(req,res,next)=>{
+  var userId = req.cookies.userId;
+  var collectionId = req.body.collectionId;
+  var time = new Date().getTime()
+  var article = {userId:userId,collectionId:collectionId,time:time}
+  global.mongodb.collection("articles").insertOne(article,(err,result)=>{
+    global.mongodb
+      .collection("collections")
+      .find({ userId: userId,collectionId:collectionId })
+      .toArray((err, result) => {
+        if (err) {
+          res.send({
+            status: 200,
+            data: null,
+            err: err
+          });
+        } else if (result) {
+          res.send({
+            status: 200,
+            // result:result,
+            data: result,
+            err: null
+          });
+        }
+      });
+  })
+})
 module.exports = router;
