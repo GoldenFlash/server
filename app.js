@@ -4,9 +4,9 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require('mongoose');
-var indexRouter = require("./routes/index");
+var articleRouter = require("./routes/article");
 var usersRouter = require("./routes/users");
-
+var indexRouter = require("./routes/index");
 var MongoClient = require("mongodb").MongoClient;
 
 var url = "mongodb://101.132.173.11:27017";
@@ -43,7 +43,7 @@ app.all("*", function(req, res, next) {
 
   next();
 });
-app.use(function(req, res, next) {
+app.all("*",function(req, res, next) {
     if (req.cookies.userId) {
         next();
     } else if (req.path == '/users/login' || req.path == '/users/logout') {
@@ -57,7 +57,8 @@ app.use(function(req, res, next) {
         })
     }
 })
-app.use("/", indexRouter);
+app.use("/index",indexRouter)
+app.use("/article", articleRouter);
 app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
