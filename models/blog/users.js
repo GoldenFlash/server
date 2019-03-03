@@ -1,5 +1,5 @@
-var express = require("express");
-var router = express.Router();
+// var express = require("express");
+// var router = express.Router();
 var getAllUsers = function(userInfo) {
   return new Promise((resolve, reject) => {
     global.mongodb
@@ -17,7 +17,7 @@ var getAllUsers = function(userInfo) {
   });
 };
 /* GET users listing. */
-router.post("/register", function(req, res, next) {
+function register (req, res, next) {
   var params = req.body;
   var userInfo = {
     nickName: params.nickName,
@@ -67,8 +67,8 @@ router.post("/register", function(req, res, next) {
     .catch(err => {
       console.log(err);
     });
-});
-router.post("/login", function(req, res, next) {
+  }
+function login(req, res, next) {
   var params = req.body;
   var account = params.account;
   var passWord = params.passWord;
@@ -127,8 +127,8 @@ router.post("/login", function(req, res, next) {
         }
       }
     });
-});
-router.get("/logout",(req,res,next)=>{
+};
+function logout(req,res,next){
   res.clearCookie('userId', { path: '/' });
   res.clearCookie('userName', { path: '/' });
   res.clearCookie('account', { path: '/' });
@@ -137,5 +137,9 @@ router.get("/logout",(req,res,next)=>{
     status:200,
     err:null
   })
-})
-module.exports = router;
+}
+module.exports = {
+  register,
+  login,
+  logout
+};

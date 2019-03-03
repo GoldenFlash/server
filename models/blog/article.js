@@ -1,9 +1,9 @@
-var express = require("express");
-var router = express.Router();
+// var express = require("express");
+// var router = express.Router();
 var mongoose = require("mongoose");
 
 /* GET home page. */
-router.post("/addCollections", function(req, res, next) {
+function addCollections(req, res, next) {
   //   db.col.update({ title: "MongoDB 教程" }, { $set: { title: "MongoDB" } });
   var param = req.body;
   var userId = req.cookies.userId;
@@ -41,8 +41,8 @@ router.post("/addCollections", function(req, res, next) {
       err: "参数不全"
     });
   }
-});
-router.get("/getCollections", function(req, res, next) {
+};
+function getCollections(req, res, next) {
   // var param = req.body;
   var userId = req.cookies.userId;
   console.log("userId", userId);
@@ -73,8 +73,8 @@ router.get("/getCollections", function(req, res, next) {
       err: "userId无效"
     });
   }
-});
-router.post("/deleteCollection", function(req, res, next) {
+};
+function deleteCollection(req, res, next) {
   var userId = req.cookies.userId;
   var param = req.body;
   if (param.id) {
@@ -107,8 +107,8 @@ router.post("/deleteCollection", function(req, res, next) {
       err: "参数不全"
     });
   }
-});
-router.post("/getArticleList", (req, res, next) => {
+};
+function getArticleList(req, res, next){
   var userId = req.cookies.userId;
   var collectionId = req.body.collectionId;
   global.mongodb.collection("articles")
@@ -140,8 +140,8 @@ router.post("/getArticleList", (req, res, next) => {
         });
       }
     });
-});
-router.post("/getArticle",(req,res,next)=>{
+};
+function getArticle(req,res,next){
   var userId = req.cookies.userId;
   var collectionId = req.body.collectionId;
   var id = mongoose.Types.ObjectId(`${req.body.id}`);
@@ -162,8 +162,29 @@ router.post("/getArticle",(req,res,next)=>{
         });
       }
     });
-})
-router.post("/addNewArticle",(req,res,next)=>{
+}
+function allArticles(req, res, next){
+  var userId = req.cookies.userId;
+  global.mongodb
+    .collection("articles")
+    .find({ userId: userId, isPublish: true })
+    .toArray((err, result) => {
+      if (err) {
+        res.send({
+          status: 200,
+          data: null,
+          err: "查询失败"
+        });
+      } else {
+        res.send({
+          status: 200,
+          data: result,
+          err: null
+        });
+      }
+    });
+};
+function addNewArticle(req,res,next){
   var userId = req.cookies.userId;
   var author = req.cookies.userName;
   var collectionId = req.body.collectionId;
@@ -201,8 +222,8 @@ router.post("/addNewArticle",(req,res,next)=>{
         }
       });
   })
-})
-router.post("/saveArticle",(req,res,next)=>{
+}
+function saveArticle(req,res,next){
   var userId = req.cookies.userId;
   var collectionId = req.body.collectionId;
   var id = mongoose.Types.ObjectId(`${req.body.id}`);
@@ -225,8 +246,8 @@ router.post("/saveArticle",(req,res,next)=>{
           });
       }
   });
-})
-router.post("/publishArticle",(req,res,next)=>{
+}
+function publishArticle(req,res,next){
   var userId = req.cookies.userId;
   var collectionId = req.body.collectionId;
   var id = mongoose.Types.ObjectId(`${req.body.id}`);
@@ -249,5 +270,16 @@ router.post("/publishArticle",(req,res,next)=>{
           });
       }
   });
-})
-module.exports = router;
+}
+module.exports = {
+  addCollections,
+  getCollections,
+  deleteCollection,
+  deleteCollection,
+  getArticleList,
+  getArticle,
+  addNewArticle,
+  saveArticle,
+  publishArticle,
+  allArticles
+};

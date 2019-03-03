@@ -3,21 +3,20 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var mongoose = require('mongoose');
-var articleRouter = require("./routes/article");
-var usersRouter = require("./routes/users");
-var indexRouter = require("./routes/index");
-var MongoClient = require("mongodb").MongoClient;
+// var articleRouter = require("./routes/article");
+// var usersRouter = require("./routes/users")
+var blogRouter = require("./routes/blog");
+// var MongoClient = require("mongodb").MongoClient;
 
-var url = "mongodb://101.132.173.11:27017";
+// var url = "mongodb://101.132.173.11:27017";
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  console.log("mongodb connect success");
-  var dbase = db.db("blogDatabase");
-  // console.log(global)
-  global.mongodb = dbase;
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   console.log("mongodb connect success");
+//   var dbase = db.db("blogDatabase");
+//   // console.log(global)
+//   global.mongodb = dbase;
+// });
 
 var app = express();
 
@@ -46,7 +45,7 @@ app.all("*", function(req, res, next) {
 app.all("*",function(req, res, next) {
     if (req.cookies.userId) {
         next();
-    } else if (req.path == '/users/login' || req.path == '/users/logout') {
+    } else if (req.path == '/blog/users/login' || req.path == '/blog/users/logout') {
         next();
     } else {
         res.json({
@@ -57,9 +56,9 @@ app.all("*",function(req, res, next) {
         })
     }
 })
-app.use("/index",indexRouter)
-app.use("/article", articleRouter);
-app.use("/users", usersRouter);
+app.use("/blog",blogRouter)
+// app.use("/article", articleRouter);
+// app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
