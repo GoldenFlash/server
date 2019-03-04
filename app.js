@@ -45,7 +45,7 @@ app.all("*", function(req, res, next) {
 app.all("*",function(req, res, next) {
     if (req.cookies.userId) {
         next();
-    } else if (req.path == '/blog/users/login' || req.path == '/blog/users/logout') {
+    } else if (req.path == '/blog/users/login' || req.path == '/blog/users/logout' || req.path == '/blog/users/register') {
         next();
     } else {
         res.json({

@@ -3,8 +3,8 @@ var router = express.Router();
 var mongoose = require("mongoose");
 
 
-var users = require('../models/blog/users') 
-var article = require('../models/blog/article') 
+var users = require('../hander/blog/users') 
+var article = require('../hander/blog/article') 
 
 mongoose.connect("mongodb://101.132.173.11:27017/blogDatabase");
 var db = mongoose.connection;
