@@ -8,13 +8,7 @@ function register(req, res, next) {
   var params = req.body;
   var date = new Date().toDateString()
   console.log(date)
-  // var userInfo = {
-  //   nickName: params.nickName,
-  //   account: params.account,
-  //   passWord: params.passWord,
-  //   registerTime:date,
-  //   signature:" "
-  // };
+  
   var user = new Users({
     nickName: params.nickName,
     account: params.account,

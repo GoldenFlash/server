@@ -3,24 +3,9 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-// var articleRouter = require("./routes/article");
-// var usersRouter = require("./routes/users")
 var blogRouter = require("./routes/blog");
-// var MongoClient = require("mongodb").MongoClient;
-
-// var url = "mongodb://101.132.173.11:27017";
-
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   console.log("mongodb connect success");
-//   var dbase = db.db("blogDatabase");
-//   // console.log(global)
-//   global.mongodb = dbase;
-// });
-
 var app = express();
 
-// view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
@@ -45,7 +30,7 @@ app.all("*", function(req, res, next) {
 app.all("*",function(req, res, next) {
     if (req.cookies.userId) {
         next();
-    } else if (req.path == '/blog/users/login' || req.path == '/blog/users/logout' || req.path == '/blog/users/register') {
+    } else if (req.path == '/blog/users/login' || req.path == '/blog/users/register') {
         next();
     } else {
         res.json({
@@ -57,8 +42,6 @@ app.all("*",function(req, res, next) {
     }
 })
 app.use("/blog",blogRouter)
-// app.use("/article", articleRouter);
-// app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
