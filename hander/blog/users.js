@@ -2,44 +2,47 @@
 // var router = express.Router();
 
 var Users = require("../../model/blog/userModel")
-// var collection = require("../../model/blog/collectionModel")
+var Collection = require("../../model/blog/collectionModel")
 /* GET users listing. */
 function register(req, res, next) {
   var params = req.body;
-  var date = new Date().toDateString()
-  console.log(date)
-  
   var user = new Users({
     nickName: params.nickName,
     account: params.account,
     passWord: params.passWord,
-    registerTime:date,
     signature:" "
   })
-  // console.log(userInfo)
-  user.save((err,result)=>{
+  user.save((err,ret)=>{
     if(err){
       res.send({
-        data:null,
         status: 200,
-        err: "注册失败"
+        data:ret,
+        err:err,
+        message: "注册失败"
       })
     }else{
-      console.log("userInfo")
-      // var newCollections =[
-      //   {
-      //     userId:userInfo._id,
-      //     title:"随笔"
-      //   },
-      //   {
-      //     userId:userInfo._id,
-      //     title:"日记本"
-      //   }
-      // ] 
+      var collections =[
+        new Collection({
+          userId:ret._id.toHexString(),
+          nickName:ret.nickName,
+          title:"随笔"
+        }),
+        new Collection({
+          userId:ret._id.toHexString(),
+          nickName:ret.nickName,
+          title:"日记本"
+        })
+      ]
+      Collection.insertMany(collections,(err,result)=>{
+        if(err){
+
+        }
+      })
       res.send({
-        data:result,
+        data:ret,
         status: 200,
-        err: null
+        err: err,
+        message:""
       })
     }
 
@@ -49,62 +52,67 @@ function login(req, res, next) {
   var params = req.body;
   var account = params.account;
   var passWord = params.passWord;
-  users.find({ account: account },(err,result)=>{
+  Users.findOne({ account: account },(err,ret)=>{
     if(err){
       res.json({
-        data: null,
         status: 500,
-        err: err
+        data: ret,
+        err: err,
+        message:"登录失败"
       });
-    }else if (result.length > 0) {
-      var user = result[0]
+    }else if (ret) {
+      var user = ret
       console.log(user)
       if (user.passWord === passWord) {
         res.cookie("userId", user._id.toHexString(), {
           path: '/',
-          maxAge: 1000 * 60 * 60
+          maxAge: 1000 * 60 * 60*24
         });
-        res.cookie("userName", user.nickName, {
+        res.cookie("nickName", user.nickName, {
           path: '/',
-          maxAge: 1000 * 60 * 60
+          maxAge: 1000 * 60 * 60*24
         });
         res.cookie("account", user.account, {
           path: '/',
-          maxAge: 1000 * 60 * 60
+          maxAge: 1000 * 60 * 60*24
         });
         res.json({
-          data: {
-            account: result[0].account,
-            nickName: result[0].nickName,
-            userId: result[0]._id.toHexString()
-          },
           status: 200,
-          err: null
+          data: {
+            account: user.account,
+            nickName: user.nickName,
+            userId: user._id.toHexString()
+          },
+          err: err,
+          message:""
         });
       } else {
         res.json({
-          data: null,
           status: 200,
-          err: "密码错误"
+          data: ret,
+          err: err,
+          message:"密码错误",
         });
       }
     } else {
       res.json({
-        data: null,
         status: 200,
-        err: "账户不存在"
+        data: ret,
+        err: err,
+        message:"账户不存在"
       });
     }
   })
 };
 function logout(req, res, next) {
   res.clearCookie('userId', { path: '/' });
-  res.clearCookie('userName', { path: '/' });
+  res.clearCookie('nickName', { path: '/' });
   res.clearCookie('account', { path: '/' });
   res.send({
-    data: "退出成功",
     status: 200,
-    err: null
+    data: null,
+    err: null,
+    message:"退出成功"
   })
 }
 module.exports = {
