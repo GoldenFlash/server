@@ -74,7 +74,8 @@ function addNewArticle(req,res,next){
   var article = new Article({
     userId:userId,
     collectionId:collectionId,
-    time:time,
+    creatTime:time,
+    updateTime:time,
     author:author,
     isPublish:isPublish,
     title:title,
@@ -86,7 +87,7 @@ function addNewArticle(req,res,next){
         status: 200,
         data: ret,
         err: err,
-        nessage:"添加失败"
+        message:"添加失败"
       });
     }
       
@@ -106,14 +107,14 @@ function saveArticle(req,res,next){
   var title = req.body.title
   var content = req.body.content
   var whereStr = {userId:userId,collectionId:collectionId,_id:id};  // 查询条件
-  var updateStr = {$set: { "title" : title,"content":content}};
+  var updateStr = {$set: {"updateTime":Date.now(),"title" : title,"content":content}};
   Article.update(whereStr,updateStr,(err,ret)=>{
      if (err){
         res.send({
           status: 200,
           data: ret,
           err:err,
-          nessage:"更新失败"
+          message:"更新失败"
         });
       }
 
@@ -132,7 +133,7 @@ function publishArticle(req,res,next){
   var title = req.body.title
   var content = req.body.content
   var whereStr = {userId:userId,collectionId:collectionId,_id:id};  // 查询条件
-  var updateStr = {$set: { "title" : title,"content":content,"isPublish":true}};
+  var updateStr = {$set: { "updateTime":Date.now(),"title" : title,"content":content,"isPublish":true}};
   Article.update(whereStr,updateStr,(err,ret)=>{
      if (err){
         res.send({
@@ -152,7 +153,6 @@ function publishArticle(req,res,next){
   })
 }
 module.exports = {
-  
   getArticleList,
   getArticle,
   addNewArticle,
