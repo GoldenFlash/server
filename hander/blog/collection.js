@@ -11,7 +11,7 @@ function addCollections(req, res, next) {
       title: param.title
     })
 
-    Collection.save((err,ret)=>{
+    collection.save((err,ret)=>{
         if (err) {
           res.send({
             status: 200,

@@ -152,9 +152,28 @@ function publishArticle(req,res,next){
       });
   })
 }
+function getHotArticle(req,res,next){
+  Article.find((err,ret)=>{
+    if (err) {
+      res.send({
+        status: 200,
+        data: ret,
+        err: err,
+        message:"查询失败"
+      });
+    }
+    res.send({
+      status: 200,
+      data: ret,
+      err: err,
+      message:""
+    });
+  })
+}
 module.exports = {
   getArticleList,
   getArticle,
+  getHotArticle,
   addNewArticle,
   saveArticle,
   publishArticle,
