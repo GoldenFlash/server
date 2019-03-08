@@ -1,6 +1,6 @@
 // var express = require("express");
 // var router = express.Router();
-
+var mongoose = require("mongoose");
 var Users = require("../../model/blog/userModel")
 var Collection = require("../../model/blog/collectionModel")
 /* GET users listing. */

@@ -153,7 +153,7 @@ function publishArticle(req,res,next){
   })
 }
 function getHotArticle(req,res,next){
-  Article.find((err,ret)=>{
+  Article.find({isPublish: true },(err,ret)=>{
     if (err) {
       res.send({
         status: 200,

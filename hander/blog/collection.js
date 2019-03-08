@@ -1,3 +1,4 @@
+var mongoose = require("mongoose");
 var Collection = require("../../model/blog/collectionModel")
 
 function addCollections(req, res, next) {
@@ -50,6 +51,7 @@ function getCollections(req, res, next) {
     });
   })
 };
+
 function deleteCollection(req, res, next) {
   var userId = req.cookies.userId;
   var param = req.body;
@@ -72,8 +74,8 @@ function deleteCollection(req, res, next) {
     })
 };
 module.exports = {
-  addCollections,
-  getCollections,
-  deleteCollection,
-  deleteCollection
+  deleteCollection:deleteCollection,
+  addCollections:addCollections,
+  getCollections:getCollections,
+  
 };
