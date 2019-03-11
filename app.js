@@ -31,20 +31,21 @@ app.all("*",function(req, res, next) {
     if (req.cookies.userId) {
         next();
     } else if (
-        req.path == '/blog/users/login' || 
-        req.path == '/blog/users/register' || 
-        req.path == '/blog/article/getHotArticle') {
+        req.path == '/api/blog/blog/users/login' || 
+        req.path == '/api/blog/blog/users/register' || 
+        req.path == '/api/blog/blog/article/getHotArticle') {
         next();
     } else {
         res.json({
             status: '200',
             data:null,
+            path: req.path,
             err: 'offLine',
 
         })
     }
 })
-app.use("/blog",blogRouter)
+app.use("/api/blog/blog",blogRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
