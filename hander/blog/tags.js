@@ -9,7 +9,7 @@ function updateTags(req,res,next){
     var title = req.body.title
 
     var whereStr = { userId: userId, collectionId: collectionId, _id: id };  // 查询条件
-    var updateStr = { $set: { "updateTime": Date.now() }, $push: {"tags": tags }};
+    var updateStr = { $set: { "updateTime": Date.now() }, $push: { "tags": title }};
 
     Article.updateOne(whereStr, updateStr,(err,ret)=>{
         if(err){
@@ -44,6 +44,26 @@ function updateTags(req,res,next){
         }
     })
 }
+
+function getTags(req,res,next){
+    Tags.find((err,ret)=>{
+        if(err){
+            res.send({
+                status: 200,
+                data: ret,
+                err: err,
+                message: "查询失败"
+            });
+        }
+        res.send({
+            status: 200,
+            data: ret,
+            err: err,
+            message: ""
+        });
+    })
+}
 module.exports={
-    updateTags
+    updateTags,
+    getTags
 }

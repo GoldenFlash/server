@@ -6,21 +6,14 @@ var users = require('../hander/blog/users')
 var article = require('../hander/blog/article') 
 var collection = require('../hander/blog/collection')
 var tags = require("../hander/blog/tags")
+
 mongoose.connect("mongodb://101.132.173.11:27017/blogDatabase",{ useCreateIndex: true });
+
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  // we're connected!
   console.log("mongodb connect success")
 });
-
-
-// var TestSchema = new mongoose.Schema({
-//     name : { type: String },//属性name,类型为String
-//     age  : { type: Number, default: 0 },//属性age,类型为Number,默认为0
-//     time : { type: Date, default: Date.now },
-//     email: { type: String,default: ''}
-// });
 
 router.post("/users/register",users.register)
 router.post("/users/login",users.login)
@@ -39,4 +32,5 @@ router.post("/article/getHotArticle",article.getHotArticle)
 router.post("/article/deleteArticle",article.deleteArticle)
 
 router.post("/tags/updateTags", tags.updateTags)
+router.get("/tags/getTags", tags.getTags)
 module.exports = router;
