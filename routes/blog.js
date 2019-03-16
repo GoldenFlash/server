@@ -5,6 +5,7 @@ var mongoose = require("mongoose");
 var users = require('../hander/blog/users') 
 var article = require('../hander/blog/article') 
 var collection = require('../hander/blog/collection')
+var tags = require("../hander/blog/tags")
 mongoose.connect("mongodb://101.132.173.11:27017/blogDatabase",{ useCreateIndex: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -35,4 +36,6 @@ router.post("/article/saveArticle",article.saveArticle)
 router.post("/article/publishArticle",article.publishArticle)
 router.post("/article/allArticles",article.allArticles)
 router.post("/article/getHotArticle",article.getHotArticle)
+
+router.post("/tags/updateTags", tags.updateTags)
 module.exports = router;

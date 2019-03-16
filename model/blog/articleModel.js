@@ -6,6 +6,7 @@ var articleSchema = new mongoose.Schema({
     updateTime:{ type: Date, default: Date.now()},
     author:{ type: String, default:""},
     title:{ type: String, default:""},
+    tags:{type:Array,default:[]},
     content:{ type: String, default:""},
     isPublish:{ type: Boolean, default:false},
     comment:{type:Array,default:[]}
