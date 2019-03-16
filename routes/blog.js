@@ -36,6 +36,7 @@ router.post("/article/saveArticle",article.saveArticle)
 router.post("/article/publishArticle",article.publishArticle)
 router.post("/article/allArticles",article.allArticles)
 router.post("/article/getHotArticle",article.getHotArticle)
+router.post("/article/deleteArticle",article.deleteArticle)
 
 router.post("/tags/updateTags", tags.updateTags)
 module.exports = router;

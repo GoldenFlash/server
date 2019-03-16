@@ -126,6 +126,31 @@ function saveArticle(req,res,next){
       });
   })
 }
+function deleteArticle(req,res,next){
+  var userId = req.cookies.userId;
+  var collectionId = req.body.collectionId;
+  var id = mongoose.Types.ObjectId(`${req.body.id}`);
+  var title = req.body.title
+  var content = req.body.content
+  var whereStr = {userId:userId,collectionId:collectionId,_id:id};  // 查询条件
+  Article.deleteOne(whereStr,(err,ret)=>{
+     if (err){
+        res.send({
+          status: 200,
+          data: ret,
+          err:err,
+          message:"删除失败"
+        });
+      }
+
+      res.send({
+        status: 200,
+        data:ret,
+        err: err,
+        message:"删除成功"
+      });
+  })
+}
 function publishArticle(req,res,next){
   var userId = req.cookies.userId;
   var collectionId = req.body.collectionId;
@@ -177,5 +202,6 @@ module.exports = {
   addNewArticle,
   saveArticle,
   publishArticle,
-  allArticles
+  allArticles,
+  deleteArticle
 };

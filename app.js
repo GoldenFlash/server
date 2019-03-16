@@ -31,9 +31,9 @@ app.all("*",function(req, res, next) {
     if (req.cookies.userId) {
         next();
     } else if (
-        req.path == '/api/blog/blog/users/login' || 
-        req.path == '/api/blog/blog/users/register' || 
-        req.path == '/api/blog/blog/article/getHotArticle') {
+        req.path == '/blog/api/users/login' || 
+        req.path == '/blog/api/users/register' || 
+        req.path == '/blog/api/article/getHotArticle') {
         next();
     } else {
         res.json({
@@ -45,7 +45,7 @@ app.all("*",function(req, res, next) {
         })
     }
 })
-app.use("/api/blog/blog",blogRouter)
+app.use("/blog/api/",blogRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

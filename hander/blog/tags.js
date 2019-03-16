@@ -31,7 +31,7 @@ function updateTags(req,res,next){
     var tags = new Tags({
         userId:userId,
         title: title,
-        count:0
+        count:1
     })
 
     tags.save((err,ret)=>{
