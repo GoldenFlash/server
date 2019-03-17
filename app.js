@@ -33,7 +33,9 @@ app.all("*",function(req, res, next) {
     } else if (
         req.path == '/blog/api/users/login' || 
         req.path == '/blog/api/users/register' || 
-        req.path == '/blog/api/article/getHotArticle') {
+        req.path == '/blog/api/article/getHotArticle'||
+        req.path == '/blog/api/tags/getTags'
+    ) {
         next();
     } else {
         res.json({

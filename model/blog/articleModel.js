@@ -9,6 +9,8 @@ var articleSchema = new mongoose.Schema({
     tags:{type:Array,default:[]},
     content:{ type: String, default:""},
     isPublish:{ type: Boolean, default:false},
-    comment:{type:Array,default:[]}
+    comment:{type:Array,default:[]},
+    view:{type:Number,default:0},
+    image: { type: String, default:"https://github.com/GoldenFlash/blog/blob/master/img/a1.jpg?raw=true"}
   });
 module.exports = mongoose.model("articles",articleSchema);

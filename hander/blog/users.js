@@ -90,7 +90,7 @@ function login(req, res, next) {
         res.json({
           status: 200,
           data: ret,
-          err: err,
+          err: "err",
           message:"密码错误",
         });
       }
@@ -98,7 +98,7 @@ function login(req, res, next) {
       res.json({
         status: 200,
         data: ret,
-        err: err,
+        err: "err",
         message:"账户不存在"
       });
     }
