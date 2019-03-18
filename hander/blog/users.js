@@ -76,12 +76,17 @@ function login(req, res, next) {
           path: '/',
           maxAge: 1000 * 60 * 60*24
         });
+        res.cookie("auth", user.auth, {
+          path: '/',
+          maxAge: 1000 * 60 * 60*24
+        });
         res.json({
           status: 200,
           data: {
             account: user.account,
             nickName: user.nickName,
-            userId: user._id.toHexString()
+            userId: user._id.toHexString(),
+            auth:user.auth
           },
           err: err,
           message:""
@@ -108,6 +113,7 @@ function logout(req, res, next) {
   res.clearCookie('userId', { path: '/' });
   res.clearCookie('nickName', { path: '/' });
   res.clearCookie('account', { path: '/' });
+  res.clearCookie('auth', { path: '/' });
   res.send({
     status: 200,
     data: null,
