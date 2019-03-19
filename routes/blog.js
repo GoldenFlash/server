@@ -30,6 +30,8 @@ router.post("/article/publishArticle",article.publishArticle)
 router.post("/article/allArticles",article.allArticles)
 router.post("/article/getHotArticle",article.getHotArticle)
 router.post("/article/deleteArticle",article.deleteArticle)
+router.post("/article/getArticleBytags", article.getArticleBytags)
+router.post("/article/articleFuzzyQuery", article.articleFuzzyQuery)
 
 router.post("/tags/updateTags", tags.updateTags)
 router.get("/tags/getTags", tags.getTags)

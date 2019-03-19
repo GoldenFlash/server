@@ -34,6 +34,8 @@ app.all("*",function(req, res, next) {
         req.path == '/blog/api/users/login' || 
         req.path == '/blog/api/users/register' || 
         req.path == '/blog/api/article/getHotArticle'||
+        req.path == '/blog/api/article/getArticleBytags'||
+        req.path == '/blog/api/article/articleFuzzyQuery'||
         req.path == '/blog/api/tags/getTags'
     ) {
         next();
@@ -43,7 +45,6 @@ app.all("*",function(req, res, next) {
             data:null,
             path: req.path,
             err: 'offLine',
-
         })
     }
 })

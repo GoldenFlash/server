@@ -195,6 +195,52 @@ function getHotArticle(req,res,next){
     });
   })
 }
+function getArticleBytags(req, res, next) {
+  var tag = req.body.tag
+  Article.find({ isPublish: true, tags: { $elemMatch: { $eq: tag }}}, (err, ret) => {
+    if (err) {
+      res.send({
+        status: 200,
+        data: ret,
+        err: err,
+        message: "查询失败"
+      });
+    }
+    res.send({
+      status: 200,
+      data: ret,
+      err: err,
+      message: ""
+    });
+  })
+}
+function articleFuzzyQuery(req,res,next){
+  var keyWord = req.body.keyWord
+
+  Article.find({
+    $or: [
+      { 'title': { '$regex': keyWord, $options: '$i' } },
+      { 'tags': { '$elemMatch': keyWord} },
+      { 'author': { '$regex': keyWord, $options: '$i' } }]
+  }).exec(function (err, ret) {
+      if (err) {
+        res.send({
+          status: 200,
+          data: ret,
+          err: err,
+          message: "查询失败"
+        });
+      } else {
+        res.send({
+          status: 200,
+          data: ret,
+          err: err,
+          message: ""
+        });
+      }
+    })
+
+}
 module.exports = {
   getArticleList,
   getArticle,
@@ -203,5 +249,7 @@ module.exports = {
   saveArticle,
   publishArticle,
   allArticles,
-  deleteArticle
+  deleteArticle,
+  getArticleBytags,
+  articleFuzzyQuery
 };
