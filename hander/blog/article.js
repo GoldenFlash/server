@@ -45,20 +45,22 @@ function getArticle(req,res,next){
 }
 function allArticles(req, res, next){
   var userId = req.cookies.userId;
-  Article.find({ userId: userId, isPublish: true },(err,ret)=>{
+  Article.find({ userId: userId, isPublish: true })
+  .sort({ 'creatTime': -1 })
+  .exec((err, ret) => {
     if (err) {
       res.send({
         status: 200,
         data: ret,
         err: err,
-        message:"查询失败"
+        message: "查询失败"
       });
     }
     res.send({
       status: 200,
       data: ret,
       err: err,
-      message:""
+      message: ""
     });
   })
 };
@@ -178,26 +180,30 @@ function publishArticle(req,res,next){
   })
 }
 function getHotArticle(req,res,next){
-  Article.find({isPublish: true },(err,ret)=>{
-    if (err) {
+  Article.find({ isPublish: true })
+    .sort({ 'creatTime': -1 })
+    .exec((err, ret) => {
+      if (err) {
+        res.send({
+          status: 200,
+          data: ret,
+          err: err,
+          message: "查询失败"
+        });
+      }
       res.send({
         status: 200,
         data: ret,
         err: err,
-        message:"查询失败"
+        message: ""
       });
-    }
-    res.send({
-      status: 200,
-      data: ret,
-      err: err,
-      message:""
-    });
-  })
+    })
 }
 function getArticleBytags(req, res, next) {
   var tag = req.body.tag
-  Article.find({ isPublish: true, tags: { $elemMatch: { $eq: tag }}}, (err, ret) => {
+  Article.find({ isPublish: true, tags: { $elemMatch: { $eq: tag } } })
+  .sort({ 'creatTime': -1 })
+  .exec((err, ret) => {
     if (err) {
       res.send({
         status: 200,
@@ -222,7 +228,7 @@ function articleFuzzyQuery(req,res,next){
       { 'title': { '$regex': keyWord, $options: '$i' } },
       { 'tags': { '$elemMatch': keyWord} },
       { 'author': { '$regex': keyWord, $options: '$i' } }]
-  }).exec(function (err, ret) {
+  }).sort({ 'creatTime': -1 }).exec(function (err, ret) {
       if (err) {
         res.send({
           status: 200,
