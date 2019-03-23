@@ -7,9 +7,17 @@ function updateTags(req,res,next){
     var collectionId = req.body.collectionId;
     var id = mongoose.Types.ObjectId(`${req.body.id}`);
     var title = req.body.title
-
+    var type = req.body.type
     var whereStr = { userId: userId, collectionId: collectionId, _id: id };  // 查询条件
-    var updateStr = { $set: { "updateTime": Date.now() }, $push: { "tags": title }};
+    var updateStr =""
+    if(type==="add"){
+        updateStr = { $set: { "updateTime": Date.now() }, $push: { "tags": title } };
+
+    }
+    if(type==="delete"){
+        console.log("type",type)
+        updateStr = { $set: { "updateTime": Date.now() }, $pull: { "tags": title } };
+    }
 
     Article.updateOne(whereStr, updateStr,(err,ret)=>{
         if(err){
