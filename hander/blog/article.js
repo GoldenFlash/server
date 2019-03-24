@@ -23,10 +23,8 @@ function getArticleList(req, res, next){
   })
 };
 function getArticle(req,res,next){
-  var userId = req.cookies.userId;
-  var collectionId = req.body.collectionId;
   var id = mongoose.Types.ObjectId(`${req.body.id}`);
-  Article.findOne({ userId: userId, collectionId: collectionId,_id:id},(err,ret)=>{
+  Article.findOne({_id:id},(err,ret)=>{
     if (err) {
       res.send({
         status: 200,
