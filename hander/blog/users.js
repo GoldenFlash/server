@@ -1,6 +1,8 @@
 // var express = require("express");
 // var router = express.Router();
 var mongoose = require("mongoose");
+var jwt = require('jsonwebtoken');
+
 var Users = require("../../model/blog/userModel")
 var Collection = require("../../model/blog/collectionModel")
 /* GET users listing. */
@@ -62,7 +64,12 @@ function login(req, res, next) {
       });
     }else if (ret) {
       var user = ret
+      user._id = user._id.toHexString()
       console.log(user)
+      var token = jwt.sign({
+        data: user
+      }, 'secret', { expiresIn: 60 * 60*24 });
+
       if (user.passWord === passWord) {
         res.cookie("userId", user._id.toHexString(), {
           path: '/',
@@ -86,7 +93,8 @@ function login(req, res, next) {
             account: user.account,
             nickName: user.nickName,
             userId: user._id.toHexString(),
-            auth:user.auth
+            auth:user.auth,
+            token: token
           },
           err: err,
           message:""
