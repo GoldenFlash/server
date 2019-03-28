@@ -178,7 +178,20 @@ function publishArticle(req,res,next){
   })
 }
 function getHotArticle(req,res,next){
-  Article.find({ isPublish: true })
+  var keyWord = req.query.keyWord
+  var whereStr
+  if(keyWord){
+    whereStr={
+      $or: [
+        { 'title': { '$regex': keyWord, $options: '$i' } },
+        { 'tags': keyWord },
+        { 'author': { '$regex': keyWord, $options: '$i' } }],
+         isPublish: true,
+    }
+  }else{
+   whereStr = { isPublish: true }
+  }
+  Article.find(whereStr)
     .sort({ 'creatTime': -1 })
     .exec((err, ret) => {
       if (err) {
@@ -198,7 +211,7 @@ function getHotArticle(req,res,next){
     })
 }
 function getArticleBytags(req, res, next) {
-  var tag = req.body.tag
+  var tag = req.query.tag
   Article.find({ isPublish: true, tags: { $elemMatch: { $eq: tag } } })
   .sort({ 'creatTime': -1 })
   .exec((err, ret) => {
@@ -224,8 +237,9 @@ function articleFuzzyQuery(req,res,next){
   Article.find({
     $or: [
       { 'title': { '$regex': keyWord, $options: '$i' } },
-      { 'tags': { '$elemMatch': keyWord} },
-      { 'author': { '$regex': keyWord, $options: '$i' } }]
+      { 'tags': keyWord },
+      { 'author': { '$regex': keyWord, $options: '$i' } }],
+       isPublish: true,
   }).sort({ 'creatTime': -1 }).exec(function (err, ret) {
       if (err) {
         res.send({
