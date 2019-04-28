@@ -73,9 +73,35 @@ function deleteCollection(req, res, next) {
         });
     })
 };
+function editeCollection(req,res,next){
+  // var userId = req.cookies.userId;
+  var param = req.body;
+    var id = mongoose.Types.ObjectId(`${param.id}`);
+    var title = param.title
+    var whereStr = { _id: id }
+    var updateStr = {$set:{"title":title}}
+    
+    Collection.updateOne(whereStr,updateStr,(err,ret)=>{
+        if (err) {
+            res.send({
+                status: 200,
+                data: ret,
+                err: err,
+                message:"修改失败"
+            });
+        }
+        res.send({
+            status: 200,
+            data: ret,
+            err: err,
+            message:""
+        });
+    })
+}
 module.exports = {
   deleteCollection:deleteCollection,
   addCollections:addCollections,
   getCollections:getCollections,
+  editeCollection:editeCollection
   
 };

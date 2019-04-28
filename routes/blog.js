@@ -22,6 +22,8 @@ router.post("/users/logout",users.logout)
 router.post("/article/addCollections",collection.addCollections)
 router.post("/article/getCollections",collection.getCollections)
 router.post("/article/deleteCollection",collection.deleteCollection)
+router.post("/article/editeCollection",collection.editeCollection)
+
 router.post("/article/getArticleList",article.getArticleList)
 router.post("/article/getArticle",article.getArticle)
 router.post("/article/addNewArticle",article.addNewArticle)
