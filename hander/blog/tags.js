@@ -10,13 +10,15 @@ function updateTags(req,res,next){
     var type = req.body.type
     var whereStr = { userId: userId, collectionId: collectionId, _id: id };  // 查询条件
     var updateStr =""
+    var updateTags = ""
     if(type==="add"){
         updateStr = { $set: { "updateTime": Date.now() }, $push: { "tags": title } };
-
+        updateTags = {$inc:{count:+1}}
     }
     if(type==="delete"){
         console.log("type",type)
         updateStr = { $set: { "updateTime": Date.now() }, $pull: { "tags": title } };
+        updateTags = {$inc:{count:-1}}
     }
 
     Article.updateOne(whereStr, updateStr,(err,ret)=>{
@@ -45,9 +47,13 @@ function updateTags(req,res,next){
     tags.save((err,ret)=>{
         if(err){
             var whereTags = {userId:userId,title:title}
-            var updateTags = {$inc:{count:+1}}
-            Tags.update(whereTags, updateTags,(err,ret)=>{
-
+            Tags.findOneAndUpdate(whereTags, updateTags,(err,ret)=>{
+                console.log("tags",ret)
+                if(type==="delete"&&ret.count<=1){
+                    Tags.deleteOne(whereTags,(err)=>{
+                        console.log(err)
+                    })
+                }
             })
         }
     })
