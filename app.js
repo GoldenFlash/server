@@ -3,8 +3,11 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var blogRouter = require("./routes/blog");
 var app = express();
+var blogRouter = require("./routes/blog");
+var doutuRouter = require("./routes/doutu")
+var spiderRouter = require("./routes/spider")
+
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -28,29 +31,35 @@ app.all("*", function(req, res, next) {
   next();
 });
 app.all("*",function(req, res, next) {
+  console.log("path",req.path)
+  if (req.path == '/blog/api'){
     if (req.cookies.userId) {
-        next();
+      next();
     } else if (
-        req.path == '/blog/api/users/login' || 
-        req.path == '/blog/api/users/register' || 
-        req.path == '/blog/api/article/getArticle'||
-        req.path == '/blog/api/article/getHotArticle'||
-        req.path == '/blog/api/article/getArticleBytags'||
-        req.path == '/blog/api/article/articleFuzzyQuery'||
-        req.path == '/blog/api/tags/getTags'
+      req.path == '/blog/api/users/login' ||
+      req.path == '/blog/api/users/register' ||
+      req.path == '/blog/api/article/getArticle' ||
+      req.path == '/blog/api/article/getHotArticle' ||
+      req.path == '/blog/api/article/getArticleBytags' ||
+      req.path == '/blog/api/article/articleFuzzyQuery' ||
+      req.path == '/blog/api/tags/getTags'
     ) {
-        next();
+      next();
     } else {
-        res.json({
-            status: '200',
-            data:null,
-            path: req.path,
-            err: 'offLine',
-        })
+      res.json({
+        status: '200',
+        data: null,
+        path: req.path,
+        err: 'offLine',
+      })
     }
+  }else{
+    next();
+  }
 })
 app.use("/blog/api/",blogRouter)
-
+app.use("/doutu/api/", doutuRouter)
+app.use("/spider/", spiderRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

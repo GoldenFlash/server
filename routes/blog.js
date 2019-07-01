@@ -1,19 +1,10 @@
 var express = require("express");
 var router = express.Router();
-var mongoose = require("mongoose");
 
 var users = require('../hander/blog/users') 
 var article = require('../hander/blog/article') 
 var collection = require('../hander/blog/collection')
 var tags = require("../hander/blog/tags")
-
-mongoose.connect("mongodb://101.132.173.11:27017/blogDatabase",{ useCreateIndex: true });
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log("mongodb connect success")
-});
 
 router.post("/users/register",users.register)
 router.post("/users/login",users.login)

@@ -1,4 +1,6 @@
 var mongoose = require("mongoose");
+var dataBase = require("../../mongodb/index")
+
 var articleSchema = new mongoose.Schema({
     userId:{type:String,required:true},
     collectionId:{type:String,required: true},
@@ -13,4 +15,5 @@ var articleSchema = new mongoose.Schema({
     view:{type:Number,default:0},
     image: { type: String, default:"https://github.com/GoldenFlash/blog/blob/master/img/a1.jpg?raw=true"}
   });
-module.exports = mongoose.model("articles",articleSchema);
+module.exports = dataBase.blogDb.model("articles",articleSchema);
+

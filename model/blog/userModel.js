@@ -1,4 +1,6 @@
 var mongoose = require("mongoose");
+var dataBase = require("../../mongodb/index")
+
 var userSchema = new mongoose.Schema({
     nickName:{type:String,required:true},
     account:{type:String,required: true,unique: true},
@@ -7,4 +9,4 @@ var userSchema = new mongoose.Schema({
     signature:{ type: String, default:""},
     auth:{type:String,default:"2"}
   });
-module.exports = mongoose.model("users",userSchema);
+module.exports = dataBase.blogDb.model("users",userSchema);
