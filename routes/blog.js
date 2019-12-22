@@ -30,4 +30,6 @@ router.post("/article/articleFuzzyQuery", article.articleFuzzyQuery)
 
 router.post("/tags/updateTags", tags.updateTags)
 router.get("/tags/getTags", tags.getTags)
+router.get("/article/getTimeLine", article.getTimeLine)
+router.get("/article/getArticleByTime", article.getArticleByTime)
 module.exports = router;

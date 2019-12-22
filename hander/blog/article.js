@@ -1,7 +1,6 @@
 var Article = require("../../model/blog/articleModel")
-
 var mongoose = require("mongoose");
-
+var moment = require("moment")
 function getArticleList(req, res, next){
   var userId = req.cookies.userId;
   var collectionId = req.body.collectionId;
@@ -178,17 +177,31 @@ function publishArticle(req,res,next){
   })
 }
 function getHotArticle(req,res,next){
-  var keyWord = req.query.keyWord
+  var search = req.query.search
+  var time = req.query.time
   var whereStr
-  if(keyWord){
+  if (search){
     whereStr={
       $or: [
-        { 'title': { '$regex': keyWord, $options: '$i' } },
-        { 'tags': keyWord },
-        { 'author': { '$regex': keyWord, $options: '$i' } }],
+        { 'title': { '$regex': search, $options: '$i' } },
+        { 'tags': search },
+        { 'author': { '$regex': search, $options: '$i' } }],
          isPublish: true,
     }
-  }else{
+  } else if (time){
+    let matchtime = time.match(/(\d{4})(\d{2})/)
+    let start = moment(`${matchtime[1]}-${matchtime[2]}`).startOf('month').format("YYYY-MM-DD")
+    let end = moment(`${matchtime[1]}-${matchtime[2]}`).endOf('month').format("YYYY-MM-DD")
+
+    whereStr = {
+      creatTime: {
+        "$gte": start,
+        "$lte": end
+      },
+      isPublish: true,
+    }
+  }
+  else{
    whereStr = { isPublish: true }
   }
   Article.find(whereStr)
@@ -259,6 +272,81 @@ function articleFuzzyQuery(req,res,next){
     })
 
 }
+function getTimeLine(req,res,next){
+  Article.find({
+    isPublish: true 
+  }).sort({ 'creatTime': -1 })
+    .exec((err, ret) => {
+      if (err) {
+        res.send({
+          status: 200,
+          data: ret,
+          err: err,
+          message: "查询失败"
+        });
+      }
+      let articleList = ret
+      let obj = {}
+      articleList.forEach(item=>{
+        let key = moment(item.creatTime).format("YYYY年MM月")
+        if (obj[key]){
+          obj[key]++
+        }else{
+          obj[key] = 1
+        }
+      })
+      let timeLine = []
+      for (var i in obj){
+        timeLine.push({
+          time:i,
+          num:obj[i]
+        })
+      }
+
+      res.send({
+        status: 200,
+        data: timeLine,
+        err: err,
+        message: ""
+      });
+    })
+}
+function getArticleByTime(req, res, next) {
+  var time = req.query.time
+
+  
+  let matchtime = time.match(/(\d{4})(\d{2})/)
+  let start = moment(`${matchtime[1]}-${matchtime[2]}`).startOf('month').format("YYYY-MM-DD")
+  let end = moment(`${matchtime[1]}-${matchtime[2]}`).endOf('month').format("YYYY-MM-DD")
+
+  whereStr = {
+    creatTime: {
+      "$gte": start,
+      "$lte": end
+    },
+    isPublish: true,
+  }
+  
+  Article.find(whereStr)
+    .sort({ 'creatTime': -1 })
+    .exec((err, ret) => {
+      if (err) {
+        res.send({
+          status: 200,
+          data: ret,
+          err: err,
+          message: "查询失败"
+        });
+      }
+      res.send({
+        status: 200,
+        data: ret,
+        err: err,
+        message: ""
+      });
+    })
+}
+
 module.exports = {
   getArticleList,
   getArticle,
@@ -269,5 +357,7 @@ module.exports = {
   allArticles,
   deleteArticle,
   getArticleBytags,
-  articleFuzzyQuery
+  articleFuzzyQuery,
+  getTimeLine,
+  getArticleByTime
 };

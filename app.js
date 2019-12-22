@@ -42,7 +42,9 @@ app.all("*",function(req, res, next) {
       req.path == '/blog/api/article/getHotArticle' ||
       req.path == '/blog/api/article/getArticleBytags' ||
       req.path == '/blog/api/article/articleFuzzyQuery' ||
+      req.path == '/blog/api/article/getTimeLine'||
       req.path == '/blog/api/tags/getTags'
+
     ) {
       next();
     } else {
