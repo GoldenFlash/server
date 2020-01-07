@@ -9,57 +9,57 @@ function getArticleList(req, res, next){
       res.send({
         status: 200,
         data: ret,
-        err:err,
+        error: err,
         message: "查询失败"
       });
     }
     res.send({
       status: 200,
       data: ret,
-      err: err,
-      message:""
+      error: err,
+      message: ""
     });
   })
 };
 function getArticle(req,res,next){
   var id = mongoose.Types.ObjectId(`${req.body.id}`);
-  Article.findOne({_id:id},(err,ret)=>{
+  Article.findOne({ _id: id }, (err, ret) => {
     if (err) {
       res.send({
         status: 200,
         data: ret,
-        err: err,
-        message:"查询失败"
-      });
-    }
-    res.send({
-      status: 200,
-      data: ret,
-      err: err,
-      message:""
-    });
-  })
-}
-function allArticles(req, res, next){
-  var userId = req.cookies.userId;
-  Article.find({ userId: userId, isPublish: true })
-  .sort({ 'creatTime': -1 })
-  .exec((err, ret) => {
-    if (err) {
-      res.send({
-        status: 200,
-        data: ret,
-        err: err,
+        error: err,
         message: "查询失败"
       });
     }
     res.send({
       status: 200,
       data: ret,
-      err: err,
+      error: err,
       message: ""
     });
-  })
+  });
+}
+function allArticles(req, res, next){
+  var userId = req.cookies.userId;
+  Article.find({ userId: userId, isPublish: true })
+    .sort({ creatTime: -1 })
+    .exec((err, ret) => {
+      if (err) {
+        res.send({
+          status: 200,
+          data: ret,
+          error: err,
+          message: "查询失败"
+        });
+      }
+      res.send({
+        status: 200,
+        data: ret,
+        error: err,
+        message: ""
+      });
+    });
 };
 function addNewArticle(req,res,next){
   var userId = req.cookies.userId;
@@ -80,24 +80,23 @@ function addNewArticle(req,res,next){
     title:title,
     content:content
   })
-  article.save((err,ret)=>{
+  article.save((err, ret) => {
     if (err) {
       res.send({
         status: 200,
         data: ret,
-        err: err,
-        message:"添加失败"
+        error: err,
+        message: "添加失败"
       });
     }
-      
+
     res.send({
       status: 200,
       data: ret,
-      err: err,
-      message:"添加成功"
+      error: err,
+      message: "添加成功"
     });
-        
-  })
+  });
 }
 function saveArticle(req,res,next){
   var userId = req.cookies.userId;
@@ -107,23 +106,23 @@ function saveArticle(req,res,next){
   var content = req.body.content
   var whereStr = {userId:userId,collectionId:collectionId,_id:id};  // 查询条件
   var updateStr = {$set: {"updateTime":Date.now(),"title" : title,"content":content}};
-  Article.update(whereStr,updateStr,(err,ret)=>{
-     if (err){
-        res.send({
-          status: 200,
-          data: ret,
-          err:err,
-          message:"更新失败"
-        });
-      }
-
+  Article.update(whereStr, updateStr, (err, ret) => {
+    if (err) {
       res.send({
         status: 200,
-        data:ret,
-        err: err,
-        message:"保存成功"
+        data: ret,
+        error: err,
+        message: "更新失败"
       });
-  })
+    }
+
+    res.send({
+      status: 200,
+      data: ret,
+      error: err,
+      message: "保存成功"
+    });
+  });
 }
 function deleteArticle(req,res,next){
   var userId = req.cookies.userId;
@@ -132,23 +131,23 @@ function deleteArticle(req,res,next){
   var title = req.body.title
   var content = req.body.content
   var whereStr = {userId:userId,collectionId:collectionId,_id:id};  // 查询条件
-  Article.deleteOne(whereStr,(err,ret)=>{
-     if (err){
-        res.send({
-          status: 200,
-          data: ret,
-          err:err,
-          message:"删除失败"
-        });
-      }
-
+  Article.deleteOne(whereStr, (err, ret) => {
+    if (err) {
       res.send({
         status: 200,
-        data:ret,
-        err: err,
-        message:"删除成功"
+        data: ret,
+        error: err,
+        message: "删除失败"
       });
-  })
+    }
+
+    res.send({
+      status: 200,
+      data: ret,
+      error: err,
+      message: "删除成功"
+    });
+  });
 }
 function publishArticle(req,res,next){
   var userId = req.cookies.userId;
@@ -158,23 +157,23 @@ function publishArticle(req,res,next){
   var content = req.body.content
   var whereStr = {userId:userId,collectionId:collectionId,_id:id};  // 查询条件
   var updateStr = {$set: { "updateTime":Date.now(),"title" : title,"content":content,"isPublish":true}};
-  Article.update(whereStr,updateStr,(err,ret)=>{
-     if (err){
-        res.send({
-          status: 200,
-          data: ret,
-          err:err,
-          message:"发布失败"
-        });
-      }
-
+  Article.update(whereStr, updateStr, (err, ret) => {
+    if (err) {
       res.send({
         status: 200,
-        data:ret,
-        err: err,
-        message:"发布成功"
+        data: ret,
+        error: err,
+        message: "发布失败"
       });
-  })
+    }
+
+    res.send({
+      status: 200,
+      data: ret,
+      error: err,
+      message: "发布成功"
+    });
+  });
 }
 function getHotArticle(req,res,next){
   var search = req.query.search
@@ -205,116 +204,119 @@ function getHotArticle(req,res,next){
    whereStr = { isPublish: true }
   }
   Article.find(whereStr)
-    .sort({ 'creatTime': -1 })
+    .sort({ creatTime: -1 })
     .exec((err, ret) => {
       if (err) {
         res.send({
           status: 200,
           data: ret,
-          err: err,
+          error: err,
           message: "查询失败"
         });
       }
       res.send({
         status: 200,
         data: ret,
-        err: err,
+        error: err,
         message: ""
       });
-    })
+    });
 }
 function getArticleBytags(req, res, next) {
   var tag = req.query.tag
   Article.find({ isPublish: true, tags: { $elemMatch: { $eq: tag } } })
-  .sort({ 'creatTime': -1 })
-  .exec((err, ret) => {
-    if (err) {
+    .sort({ creatTime: -1 })
+    .exec((err, ret) => {
+      if (error) {
+        res.send({
+          status: 200,
+          data: ret,
+          error: err,
+          message: "查询失败"
+        });
+      }
       res.send({
         status: 200,
         data: ret,
-        err: err,
-        message: "查询失败"
+        error: err,
+        message: ""
       });
-    }
-    res.send({
-      status: 200,
-      data: ret,
-      err: err,
-      message: ""
     });
-  })
 }
 function articleFuzzyQuery(req,res,next){
   var keyWord = req.body.keyWord
 
   Article.find({
     $or: [
-      { 'title': { '$regex': keyWord, $options: '$i' } },
-      { 'tags': keyWord },
-      { 'author': { '$regex': keyWord, $options: '$i' } }],
-       isPublish: true,
-  }).sort({ 'creatTime': -1 }).exec(function (err, ret) {
+      { title: { $regex: keyWord, $options: "$i" } },
+      { tags: keyWord },
+      { author: { $regex: keyWord, $options: "$i" } }
+    ],
+    isPublish: true
+  })
+    .sort({ creatTime: -1 })
+    .exec(function(err, ret) {
       if (err) {
         res.send({
           status: 200,
           data: ret,
-          err: err,
+          error: err,
           message: "查询失败"
         });
       } else {
         res.send({
           status: 200,
           data: ret,
-          err: err,
+          error: err,
           message: ""
         });
       }
-    })
+    });
 
 }
 function getTimeLine(req,res,next){
   Article.find({
-    isPublish: true 
-  }).sort({ 'creatTime': -1 })
+    isPublish: true
+  })
+    .sort({ creatTime: -1 })
     .exec((err, ret) => {
       if (err) {
         res.send({
           status: 200,
           data: ret,
-          err: err,
+          error: err,
           message: "查询失败"
         });
       }
-      let articleList = ret
-      let obj = {}
-      articleList.forEach(item=>{
-        let key = moment(item.creatTime).format("YYYY年MM月")
-        if (obj[key]){
-          obj[key]++
-        }else{
-          obj[key] = 1
+      let articleList = ret;
+      let obj = {};
+      articleList.forEach(item => {
+        let key = moment(item.creatTime).format("YYYY年MM月");
+        if (obj[key]) {
+          obj[key]++;
+        } else {
+          obj[key] = 1;
         }
-      })
-      let timeLine = []
-      for (var i in obj){
+      });
+      let timeLine = [];
+      for (var i in obj) {
         timeLine.push({
-          time:i,
-          num:obj[i]
-        })
+          time: i,
+          num: obj[i]
+        });
       }
 
       res.send({
         status: 200,
         data: timeLine,
-        err: err,
+        error: err,
         message: ""
       });
-    })
+    });
 }
 function getArticleByTime(req, res, next) {
   var time = req.query.time
 
-  
   let matchtime = time.match(/(\d{4})(\d{2})/)
   let start = moment(`${matchtime[1]}-${matchtime[2]}`).startOf('month').format("YYYY-MM-DD")
   let end = moment(`${matchtime[1]}-${matchtime[2]}`).endOf('month').format("YYYY-MM-DD")
@@ -328,23 +330,23 @@ function getArticleByTime(req, res, next) {
   }
   
   Article.find(whereStr)
-    .sort({ 'creatTime': -1 })
+    .sort({ creatTime: -1 })
     .exec((err, ret) => {
       if (err) {
         res.send({
           status: 200,
           data: ret,
-          err: err,
+          error: err,
           message: "查询失败"
         });
       }
       res.send({
         status: 200,
         data: ret,
-        err: err,
+        error: err,
         message: ""
       });
-    })
+    });
 }
 
 module.exports = {

@@ -18,10 +18,10 @@ function register(req, res, next) {
     if(err){
       res.send({
         status: 200,
-        data:ret,
-        err:err,
+        data: ret,
+        error: err,
         message: "注册失败"
-      })
+      });
     }else{
       var collections =[
         new Collection({
@@ -41,11 +41,11 @@ function register(req, res, next) {
         }
       })
       res.send({
-        data:ret,
+        data: ret,
         status: 200,
-        err: err,
-        message:""
-      })
+        error: err,
+        message: ""
+      });
     }
 
   })
@@ -59,8 +59,8 @@ function login(req, res, next) {
       res.json({
         status: 500,
         data: ret,
-        err: err,
-        message:"登录失败"
+        error: err,
+        message: "登录失败"
       });
     }else if (ret) {
       var user = ret
@@ -93,26 +93,26 @@ function login(req, res, next) {
             account: user.account,
             nickName: user.nickName,
             userId: user._id.toHexString(),
-            auth:user.auth,
+            auth: user.auth,
             token: token
           },
-          err: err,
-          message:""
+          error: err,
+          message: ""
         });
       } else {
         res.json({
           status: 200,
           data: ret,
-          err: "err",
-          message:"密码错误",
+          error: "err",
+          message: "密码错误"
         });
       }
     } else {
       res.json({
         status: 200,
         data: ret,
-        err: "err",
-        message:"账户不存在"
+        error: "err",
+        message: "账户不存在"
       });
     }
   })
@@ -125,9 +125,9 @@ function logout(req, res, next) {
   res.send({
     status: 200,
     data: null,
-    err: null,
-    message:"退出成功"
-  })
+    error: null,
+    message: "退出成功"
+  });
 }
 module.exports = {
   register,
