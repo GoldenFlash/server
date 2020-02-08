@@ -7,7 +7,7 @@ var app = express();
 var blogRouter = require("./routes/blog");
 var doutuRouter = require("./routes/doutu")
 var spiderRouter = require("./routes/spider")
-
+var p2019nCovRouter = require("./projects/2019-nCov/route")
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -62,6 +62,7 @@ app.all("*",function(req, res, next) {
 app.use("/blog/api/",blogRouter)
 app.use("/doutu/api/", doutuRouter)
 app.use("/spider/", spiderRouter)
+app.use("/2019nCov/",p2019nCovRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
